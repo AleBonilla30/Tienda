@@ -22,7 +22,7 @@ public class Entrada {
         cliente.setTelefono(644321234);
         clienteRepository.actualizarCliente(cliente);*/
 
-        clienteRepository.Actualizar(1, new Cliente("Alejandra Gonzalez Bonilla", "ale.bonillasv@gmail.com","12344566ALGB",564347897));
+        clienteRepository.actualizarCliente(1, new Cliente("Alejandra Gonzalez Bonilla", "ale.bonillasv@gmail.com","12344566ALGB",564347897));
 
 
 

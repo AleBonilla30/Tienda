@@ -150,7 +150,7 @@ public class ClienteRepository {
         }
 
     }*/
-    public void Actualizar(int id, Cliente cliente){
+    public void actualizarCliente(int id, Cliente cliente){
         connection = DBConnection.getConnection();
         PreparedStatement preparedStatement;
 
