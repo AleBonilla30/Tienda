@@ -121,6 +121,34 @@ public class ClienteRepository {
             DBConnection.closeConnecction();
             connection = null;
         }
+
+    }
+    public void actualizarCliente(Cliente cliente){
+        connection = DBConnection.getConnection();
+        PreparedStatement preparedStatement;
+
+        String query = "UPDATE CLIENTES SET nombre = ?, correo = ?, telefono = ? WHERE id_cliente = ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,cliente.getNombre());
+            preparedStatement.setString(2, cliente.getCorreo());
+            preparedStatement.setInt(3,cliente.getTelefono());
+            preparedStatement.setInt(4,cliente.getId_cliente());
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+            if (filasAfectadas > 0){
+                JOptionPane.showMessageDialog(null,"Cliente actualizado correctamente..✔");
+            }else {
+                JOptionPane.showMessageDialog(null,"No se ha encontra el cliente con ese ID..❌");
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,"Error al actualizar.."+e.getMessage()+"❌");
+        }finally {
+            DBConnection.closeConnecction();
+            connection = null;
+        }
+
     }
 
 }

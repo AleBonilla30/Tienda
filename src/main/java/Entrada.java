@@ -14,7 +14,13 @@ public class Entrada {
         }else {
             JOptionPane.showMessageDialog(null, "No se ha podido hacer el login correctamente");
         }*/
-        clienteRepository.eliminarCliente(3);
+        //clienteRepository.eliminarCliente(3);
+        Cliente cliente = new Cliente();
+        cliente.setId_cliente(8);
+        cliente.setNombre("Jorge Morales");
+        cliente.setCorreo("jorge.morales@gmail.com");
+        cliente.setTelefono(678490983);
+        clienteRepository.actualizarCliente(cliente);
 
 
 
