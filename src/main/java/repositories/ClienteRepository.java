@@ -100,4 +100,27 @@ public class ClienteRepository {
 
     }
 
+    public void eliminarCliente(int id){
+        connection = DBConnection.getConnection();
+        PreparedStatement preparedStatement;
+        String query = "DELETE FROM clientes WHERE id_cliente = ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,id);
+            int filasAfectada = preparedStatement.executeUpdate();
+            if (filasAfectada > 0){
+                JOptionPane.showMessageDialog(null,"Cliente eliminado correctamente..✔");
+            }else{
+                JOptionPane.showMessageDialog(null,"No se ha encontra el cliente con ese ID..❌");
+            }
+            preparedStatement.close();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Ha habido un error de eliminacion.. "+e.getMessage()+". ❌");
+        }finally {
+            DBConnection.closeConnecction();
+            connection = null;
+        }
+    }
+
 }
