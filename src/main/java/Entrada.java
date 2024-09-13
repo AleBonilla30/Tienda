@@ -14,13 +14,15 @@ public class Entrada {
         }else {
             JOptionPane.showMessageDialog(null, "No se ha podido hacer el login correctamente");
         }*/
-        //clienteRepository.eliminarCliente(3);
-        Cliente cliente = new Cliente();
-        cliente.setId_cliente(8);
-        cliente.setNombre("Jorge Morales");
-        cliente.setCorreo("jorge.morales@gmail.com");
-        cliente.setTelefono(678490983);
-        clienteRepository.actualizarCliente(cliente);
+        //clienteRepository.eliminarCliente(5);
+       /* Cliente cliente = new Cliente();
+        cliente.setId_cliente(7);
+        cliente.setNombre("Damaris Gonzalez Bonilla");
+        cliente.setCorreo("damaBonilla@gmail.com");
+        cliente.setTelefono(644321234);
+        clienteRepository.actualizarCliente(cliente);*/
+
+        clienteRepository.Actualizar(1, new Cliente("Alejandra Gonzalez Bonilla", "ale.bonillasv@gmail.com","12344566ALGB",564347897));
 
 
 

@@ -123,7 +123,7 @@ public class ClienteRepository {
         }
 
     }
-    public void actualizarCliente(Cliente cliente){
+    /*public void actualizarCliente(Cliente cliente){
         connection = DBConnection.getConnection();
         PreparedStatement preparedStatement;
 
@@ -134,6 +134,34 @@ public class ClienteRepository {
             preparedStatement.setString(2, cliente.getCorreo());
             preparedStatement.setInt(3,cliente.getTelefono());
             preparedStatement.setInt(4,cliente.getId_cliente());
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+            if (filasAfectadas > 0){
+                JOptionPane.showMessageDialog(null,"Cliente actualizado correctamente..✔");
+            }else {
+                JOptionPane.showMessageDialog(null,"No se ha encontra el cliente con ese ID..❌");
+            }
+            preparedStatement.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,"Error al actualizar.."+e.getMessage()+"❌");
+        }finally {
+            DBConnection.closeConnecction();
+            connection = null;
+        }
+
+    }*/
+    public void Actualizar(int id, Cliente cliente){
+        connection = DBConnection.getConnection();
+        PreparedStatement preparedStatement;
+
+        String query = "UPDATE CLIENTES SET nombre = ?, correo = ?, pass = ?, telefono = ? WHERE id_cliente = ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1,cliente.getNombre());
+            preparedStatement.setString(2, cliente.getCorreo());
+            preparedStatement.setString(3, cliente.getPassword());
+            preparedStatement.setInt(4,cliente.getTelefono());
+            preparedStatement.setInt(5,id);
 
             int filasAfectadas = preparedStatement.executeUpdate();
             if (filasAfectadas > 0){
