@@ -12,7 +12,7 @@ public class ClienteRepository {
    // Scanner scanner = new Scanner(System.in);
     private Connection connection;
 
-    public void RegistrarCliente(Cliente cliente){
+    public void registrarCliente(Cliente cliente){
         PreparedStatement preparedStatement ;
         String correo = cliente.getCorreo();
 
@@ -21,11 +21,12 @@ public class ClienteRepository {
 
         if (!existeCorreoDB(correo)){
             try {
-                String query = "INSERT INTO clientes (nombre,correo,pass) VALUES (?,?,?)";
+                String query = "INSERT INTO clientes (nombre,correo,pass,telefono) VALUES (?,?,?,?)";
                 preparedStatement = connection.prepareStatement(query);
                 preparedStatement.setString(1, cliente.getNombre());
                 preparedStatement.setString(2, cliente.getCorreo());
                 preparedStatement.setString(3, cliente.getPassword());
+                preparedStatement.setInt(4,cliente.getTelefono());
 
                 preparedStatement.execute();
                 preparedStatement.close();

@@ -16,6 +16,10 @@ public class Cliente {
         this.password = password;
         this.telefono = telefono;
     }
+    public Cliente(String correo, String password){
+        this.correo = correo;
+        this.password = password;
+    }
 
     public int getId_cliente() {
         return id_cliente;
