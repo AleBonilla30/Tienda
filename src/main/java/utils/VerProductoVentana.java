@@ -17,11 +17,11 @@ public class VerProductoVentana extends JFrame {
         ProductoRepository productoRepository = new ProductoRepository();
         ArrayList<Producto> productos = productoRepository.verProductos();
 
+        //crear una tabla para mostrar los productos
         String[] nombreColumnas = {"ID","Titulo","Precio","Stock","Categoria","Descripción"};
         Object [][] data = new Object[productos.size()][6];
 
         //llenar los datos para la tabla
-
         for (int i = 0; i < productos.size(); i++) {
             Producto producto = productos.get(i);
             data[i][0] = producto.getId();
