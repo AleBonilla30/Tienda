@@ -36,6 +36,7 @@ public class MenuPrincipalVentana extends JFrame {
         verProductosBoton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                verProductos();
 
             }
         });
@@ -48,6 +49,11 @@ public class MenuPrincipalVentana extends JFrame {
 
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    private void verProductos(){
+        new VerProductoVentana();
+        this.dispose();
     }
 
     private void actualizarCliente(){

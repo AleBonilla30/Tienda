@@ -5,6 +5,7 @@ package repositories;
 import database.DBConnection;
 
 
+import model.Producto;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -19,9 +20,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoRepository {
+    private Producto producto;
 
     public void cargarProductos(){
       BufferedReader br ;
@@ -118,6 +121,39 @@ public class ProductoRepository {
             }
         }
 
+
+    }
+
+    public ArrayList<Producto> verProductos(){
+        Connection connection = DBConnection.getConnection();
+        ArrayList<Producto> productos = new ArrayList<>();
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        String query = "SELECT id, title, price, stock, category, description FROM productos;";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                producto = new Producto();
+                producto.setId(resultSet.getInt("id"));
+                producto.setTitle(resultSet.getString("title"));
+                producto.setPrice(resultSet.getDouble("price"));
+                producto.setStock(resultSet.getInt("stock"));
+                producto.setCategory(resultSet.getString("category"));
+                producto.setDescription(resultSet.getString("description"));
+                productos.add(producto);
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,"Error al obtener los productos");
+        }finally {
+            DBConnection.closeConnecction();
+        }
+
+        return productos;
 
     }
 
