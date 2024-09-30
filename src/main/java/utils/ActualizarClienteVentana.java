@@ -34,6 +34,7 @@ public class ActualizarClienteVentana extends JFrame {
         JLabel telefonoLabel = new JLabel("Nuevo telefono");
         telefonoField = new JTextField();
         JButton actualizarBoton = new JButton("Actualizar cliente");
+        JButton volverBoton = new JButton("Volver");
 
         //agregamos los componentes
 
@@ -47,7 +48,17 @@ public class ActualizarClienteVentana extends JFrame {
         add(passwordField);
         add(telefonoLabel);
         add(telefonoField);
-        add(actualizarBoton);
+        add(actualizarBoton, BorderLayout.CENTER);
+        add(volverBoton);
+
+
+        volverBoton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new MenuPrincipalVentana();
+                dispose();
+            }
+        });
 
         actualizarBoton.addActionListener(new ActionListener() {
             @Override
@@ -55,6 +66,8 @@ public class ActualizarClienteVentana extends JFrame {
                 actualizarCliente();
             }
         });
+
+
         setLocationRelativeTo(null);
         setVisible(true);
 

@@ -47,6 +47,13 @@ public class MenuPrincipalVentana extends JFrame {
             }
         });
 
+        cerrarSesionBoton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cerrarSesion();
+            }
+        });
+
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -59,6 +66,11 @@ public class MenuPrincipalVentana extends JFrame {
     private void actualizarCliente(){
         new ActualizarClienteVentana();
         this.dispose();//cierra la ventana despues de actualizar
+    }
+
+    private void cerrarSesion(){
+        new LoginVentana();
+        this.dispose();
     }
 
 

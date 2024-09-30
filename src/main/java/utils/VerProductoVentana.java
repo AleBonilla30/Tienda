@@ -5,6 +5,8 @@ import repositories.ProductoRepository;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class VerProductoVentana extends JFrame {
@@ -12,7 +14,7 @@ public class VerProductoVentana extends JFrame {
     public VerProductoVentana(){
         setTitle("Lista de productos 📝");
         setSize(800,400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//no cierra la aplicacion entera
 
         ProductoRepository productoRepository = new ProductoRepository();
         ArrayList<Producto> productos = productoRepository.verProductos();
@@ -35,6 +37,21 @@ public class VerProductoVentana extends JFrame {
         JTable table = new JTable(data,nombreColumnas);
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
+
+        JButton volverBoton = new JButton("Volver");
+        volverBoton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new MenuPrincipalVentana();
+                dispose();
+
+            }
+        });
+
+        //Agrega el boton volver al panel
+        JPanel panelInferior = new JPanel();
+        panelInferior.add(volverBoton);
+        add(panelInferior,BorderLayout.SOUTH);
 
         setLocationRelativeTo(null);
         setVisible(true);
