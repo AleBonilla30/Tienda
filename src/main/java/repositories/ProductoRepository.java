@@ -31,8 +31,6 @@ public class ProductoRepository {
       Connection connection = DBConnection.getConnection();
       PreparedStatement preparedStatement = null;
 
-
-
             //Crear la conexion
         URL url = null;
         try {
