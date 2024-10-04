@@ -1,7 +1,4 @@
-package utils;
-
-import model.Cliente;
-import repositories.ClienteRepository;
+package view;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,6 +50,12 @@ public class MenuPrincipalVentana extends JFrame {
                 cerrarSesion();
             }
         });
+        verCarritoBoton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                verCarrito();
+            }
+        });
 
         setLocationRelativeTo(null);
         setVisible(true);
@@ -70,6 +73,10 @@ public class MenuPrincipalVentana extends JFrame {
 
     private void cerrarSesion(){
         new LoginVentana();
+        this.dispose();
+    }
+    private void verCarrito(){
+        new VerCarritoVentana();
         this.dispose();
     }
 

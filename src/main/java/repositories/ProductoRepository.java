@@ -5,7 +5,9 @@ package repositories;
 import database.DBConnection;
 
 
+import model.Cliente;
 import model.Producto;
+import model.Sesion;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -184,6 +186,70 @@ public class ProductoRepository {
         }
     }
 
+    public void agregarProductosCarrito(int idCliente, int idProducto){
+        Connection connection = DBConnection.getConnection();
+        PreparedStatement ps = null;
+
+        String query = "INSERT INTO carrito (id_cliente,id_producto,cantidas) VALUES (?,?,?)"+
+                "ON DUPLICATE KEY UPDATE cantiad = cantidad +1";//incrementa la cantidad si ya esta en el carrito
+
+
+        try {
+            ps = connection.prepareStatement(query);
+            ps.setInt(1,idCliente);
+            ps.setInt(2,idProducto);
+            ps.executeUpdate();
+            ps.close();
+            JOptionPane.showMessageDialog(null,"Producto añadido correctamente. ✔");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,"Error al añadir producto al carrito. ❌ "+e.getMessage());
+        }finally {
+            DBConnection.closeConnecction();
+        }
+
+    }
+
+    public ArrayList<Producto> verCarrito(){
+        Connection connection = DBConnection.getConnection();
+        ArrayList<Producto> productos = new ArrayList<>();
+
+        //obtener el cliente logeado desde la sesion
+        Cliente clienteLogueado = Sesion.getClienteLogiado();
+
+        if (clienteLogueado == null){
+            JOptionPane.showMessageDialog(null,"Debes iniciar sesion primero para ver los productos en el carrito");
+            return productos;
+        }
+        String query = "SELECT productos.id, productos.description, productos.price, productos.title, carrito.cantidad FROM carrito"+
+                "JOIN productos ON carrito.id_producto = productos.id"+
+                "WHERE carrito.id_cliente = ?";
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, clienteLogueado.getId_cliente());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                Producto producto1 = new Producto();
+                producto1.setId(resultSet.getInt("id"));
+                producto1.setDescription(resultSet.getString("description"));
+                producto1.setPrice(resultSet.getDouble("price"));
+                producto1.setTitle(resultSet.getString("title"));
+                producto1.setStock(resultSet.getInt("cantidad"));
+                productos.add(producto1);
+            }
+            resultSet.close();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null,"Error al obtener los productos del carrito. ❌");
+        }finally {
+            DBConnection.closeConnecction();
+        }
+
+
+        return productos;
+
+    }
 
 }
 

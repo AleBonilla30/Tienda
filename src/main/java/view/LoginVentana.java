@@ -1,5 +1,7 @@
-package utils;
+package view;
 
+import model.Cliente;
+import model.Sesion;
 import repositories.ClienteRepository;
 
 import javax.swing.*;
@@ -12,7 +14,7 @@ public class LoginVentana extends JFrame {
     private JPasswordField passwordField;
     private JTextField nombreField;
     private JTextField telefonoField;
-    private ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository = new ClienteRepository();
 
     public LoginVentana()  {
         setTitle("Iniciar sesión");
@@ -62,15 +64,20 @@ public class LoginVentana extends JFrame {
     }
 
     private void iniciarSesion(){
+
         String correo = correoField.getText();
         String pass = new String(passwordField.getPassword());
-        clienteRepository = new ClienteRepository();
 
-        if (clienteRepository.relizarLoging(correo,pass)){
+        // Llamamos a relizarLoging() y obtenemos un objeto Cliente si las credenciales son correctas
+        Cliente cliente = clienteRepository.relizarLoging(correo,pass);
+
+        if (cliente != null){
+            Sesion.setClienteLogiado(cliente);
             JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso.");
             abrirMenuPricipal();
         }else {
             JOptionPane.showMessageDialog(this, "Correo o contraseña incorrectos.");
+
         }
     }
 

@@ -76,9 +76,9 @@ public class ClienteRepository {
         return estaCorreo;
     }
 
-    public boolean relizarLoging(String correo, String password){
+    public Cliente relizarLoging(String correo, String password){
         connection = DBConnection.getConnection();
-        boolean estaCliente = false;
+        Cliente cliente = null;
         ResultSet resultSet;
 
         String query = String.format("SELECT * FROM %s WHERE %s = ? AND %s = ?",
@@ -88,7 +88,19 @@ public class ClienteRepository {
             preparedStatement.setString(1,correo);
             preparedStatement.setString(2,password);
             resultSet = preparedStatement.executeQuery();
-            estaCliente = resultSet.next();
+
+            if (resultSet.next()){
+                // Si las credenciales son correctas, creamos un objeto Cliente con los datos
+                cliente = new Cliente();
+                cliente.setId_cliente(resultSet.getInt("id_cliente"));
+                cliente.setNombre(resultSet.getString("nombre"));
+                cliente.setCorreo(resultSet.getString("correo"));
+                cliente.setPassword(resultSet.getString("pass"));
+                cliente.setTelefono(resultSet.getInt("telefono"));
+            }
+            preparedStatement.close();
+            resultSet.close();
+
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage()+" ❌");
@@ -96,7 +108,7 @@ public class ClienteRepository {
             DBConnection.closeConnecction();
             connection = null;
         }
-        return estaCliente;
+        return cliente;
 
 
     }

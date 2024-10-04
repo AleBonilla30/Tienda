@@ -1,4 +1,4 @@
-import utils.LoginVentana;
+import view.LoginVentana;
 import repositories.ProductoRepository;
 
 public class Entrada {
