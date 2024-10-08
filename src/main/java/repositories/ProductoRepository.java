@@ -32,6 +32,7 @@ public class ProductoRepository {
       BufferedReader br ;
       Connection connection = DBConnection.getConnection();
       PreparedStatement preparedStatement = null;
+      PreparedStatement checkStatement = null;
 
             //Crear la conexion
         URL url = null;
@@ -46,60 +47,68 @@ public class ProductoRepository {
             String query = "INSERT INTO productos " +
                     "(id,availabilityStatus,category,description,dimensions_width,dimensions_height,dimensions_depth,discountPercentage,images,price,rating,shippingInformation,sku,stock,thumbnail, title,warrantyInformation, weight)" +
                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            String checkquery = "SELECT COUNT(*) FROM productos WHERE id = ?;";
 
             for (int i = 0; i <products.length() ; i++) {
                 JSONObject product = products.getJSONObject(i);
 
                 int id = product.getInt("id");
-                String availabilityStatus = product.getString("availabilityStatus");
-                String category = product.getString("category");
-                String description = product.getString("description");
-                JSONObject dimensions = product.getJSONObject("dimensions");
-                double dimensions_width = dimensions.getDouble("width");
-                double dimensions_height = dimensions.getDouble("height");
-                double dimensions_depth = dimensions.getDouble("depth");
-                double discountPercentage = product.getDouble("discountPercentage");
-                JSONArray imagesArray =product.getJSONArray("images");
-                String images = imagesArray.toString();
-                double price = product.getDouble("price");
-                double rating = product.getDouble("rating");
-                String shippingInformation = product.getString("shippingInformation");
-                String sku = product.getString("sku");
-                int stock = product.getInt("stock");
-                String thumbnail = product.getString("thumbnail");
-                String title = product.getString("title");
-                String warrantyInformation = product.getString("warrantyInformation");
-                double weight = product.getDouble("weight");
+                //comprobamos si el  producto existe
+                checkStatement = connection.prepareStatement(checkquery);
+                checkStatement.setInt(1,id);
+                ResultSet checkResult = checkStatement.executeQuery();
+                checkResult.next();
 
-                //preparar y ejecutar el statement
-                preparedStatement = connection.prepareStatement(query);
-                preparedStatement.setInt(1, id);
-                preparedStatement.setString(2, availabilityStatus);
-                preparedStatement.setString(3, category);
-                preparedStatement.setString(4, description);
-                preparedStatement.setDouble(5, dimensions_width);
-                preparedStatement.setDouble(6, dimensions_height);
-                preparedStatement.setDouble(7, dimensions_depth);
-                preparedStatement.setDouble(8, discountPercentage);
-                preparedStatement.setString(9, images);
-                preparedStatement.setDouble(10, price);
-                preparedStatement.setDouble(11, rating);
-                preparedStatement.setString(12, shippingInformation);
-                preparedStatement.setString(13, sku);
-                preparedStatement.setInt(14, stock);
-                preparedStatement.setString(15, thumbnail);
-                preparedStatement.setString(16, title);
-                preparedStatement.setString(17, warrantyInformation);
-                preparedStatement.setDouble(18, weight);
+                int count = checkResult.getInt(1);
 
-                preparedStatement.executeUpdate();
-                JOptionPane.showMessageDialog(null,"Productos cargados en la Base de datos");
+                if (count == 0){
+                    String availabilityStatus = product.getString("availabilityStatus");
+                    String category = product.getString("category");
+                    String description = product.getString("description");
+                    JSONObject dimensions = product.getJSONObject("dimensions");
+                    double dimensions_width = dimensions.getDouble("width");
+                    double dimensions_height = dimensions.getDouble("height");
+                    double dimensions_depth = dimensions.getDouble("depth");
+                    double discountPercentage = product.getDouble("discountPercentage");
+                    JSONArray imagesArray =product.getJSONArray("images");
+                    String images = imagesArray.toString();
+                    double price = product.getDouble("price");
+                    double rating = product.getDouble("rating");
+                    String shippingInformation = product.getString("shippingInformation");
+                    String sku = product.getString("sku");
+                    int stock = product.getInt("stock");
+                    String thumbnail = product.getString("thumbnail");
+                    String title = product.getString("title");
+                    String warrantyInformation = product.getString("warrantyInformation");
+                    double weight = product.getDouble("weight");
 
+                    //preparar y ejecutar el statement
+                    preparedStatement = connection.prepareStatement(query);
+                    preparedStatement.setInt(1, id);
+                    preparedStatement.setString(2, availabilityStatus);
+                    preparedStatement.setString(3, category);
+                    preparedStatement.setString(4, description);
+                    preparedStatement.setDouble(5, dimensions_width);
+                    preparedStatement.setDouble(6, dimensions_height);
+                    preparedStatement.setDouble(7, dimensions_depth);
+                    preparedStatement.setDouble(8, discountPercentage);
+                    preparedStatement.setString(9, images);
+                    preparedStatement.setDouble(10, price);
+                    preparedStatement.setDouble(11, rating);
+                    preparedStatement.setString(12, shippingInformation);
+                    preparedStatement.setString(13, sku);
+                    preparedStatement.setInt(14, stock);
+                    preparedStatement.setString(15, thumbnail);
+                    preparedStatement.setString(16, title);
+                    preparedStatement.setString(17, warrantyInformation);
+                    preparedStatement.setDouble(18, weight);
 
+                    preparedStatement.executeUpdate();
+                    JOptionPane.showMessageDialog(null,"Productos cargados en la Base de datos");
 
-
-
-
+                }
+                checkResult.close();
+                checkStatement.close();
 
 
             }
@@ -157,14 +166,18 @@ public class ProductoRepository {
 
     }
 
-    public void borrarProductos(int idProducto){
+
+    //metodo para eliminar completamente los productos del carrito
+    public void borrarProductos(int idCliente ,int idProducto){
         Connection connection = DBConnection.getConnection();
         PreparedStatement pr = null;
 
         try {
-            String query = "DELETE FROM productos WHERE id = ?;";
+            String query = "DELETE FROM carrito WHERE id_cliente = ? AND id_producto = ?;";
             pr = connection.prepareStatement(query);
-            pr.setInt(1, idProducto);//seteamos el id del producto
+            pr.setInt(1, idCliente);//seteamos el id del producto
+            pr.setInt(2,idProducto);
+
              int filasAfectadas = pr.executeUpdate();
              if (filasAfectadas > 0){
                  JOptionPane.showMessageDialog(null,"Producto con ID "+idProducto+" eliminado correctamente");
@@ -184,6 +197,45 @@ public class ProductoRepository {
             }
 
         }
+    }
+
+    public void diminuirProductosCarrito(int idCliente, int idProducto){
+        Connection connection = DBConnection.getConnection();
+        PreparedStatement preparedStatement;
+
+        String query = "UPDATE carrito set cantidad = cantidad - 1 WHERE id_cliente = ? AND id_producto = ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1,idCliente);
+            preparedStatement.setInt(2,idProducto);
+
+            int filasAfectadas = preparedStatement.executeUpdate();
+
+            if (filasAfectadas > 0){
+                //consulta para tener la nueva cantidad de productos
+                String selectQuery = "SELECT cantidad FROM carrito WHERE id_cliente = ? AND id_producto = ?";
+                PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
+                selectStatement.setInt(1,idCliente);
+                selectStatement.setInt(2,idProducto);
+                ResultSet resultSet = selectStatement.executeQuery();
+
+                if (resultSet.next()){
+                    int cantidadActual = resultSet.getInt("cantidad");
+                    //si la cantidad llega a 0 elimina el producto del carrito
+                    if (cantidadActual <= 0){
+                        borrarProductos(idCliente,idProducto);//metodo para eliminar completamente
+                    }
+                }
+                selectStatement.close();
+            }else {
+                JOptionPane.showMessageDialog(null,"No se encontro el producto en el carrito. ❌");
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al disminuir la cantidad del producto en el carrito. ❌ " + e.getMessage());
+        }finally {
+            DBConnection.closeConnecction();
+        }
+
     }
 
     public void agregarProductosCarrito(int idCliente, int idProducto){
