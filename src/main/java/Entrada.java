@@ -1,5 +1,5 @@
-import view.LoginVentana;
 import repositories.ProductoRepository;
+import view.LoginVentana;
 
 public class Entrada {
     public static void main(String[] args) {
@@ -7,7 +7,7 @@ public class Entrada {
         //productoRepository.cargarProductos();
         productoRepository.borrarProductos(31);
 
-         new LoginVentana();
+        new LoginVentana();
 
 
 

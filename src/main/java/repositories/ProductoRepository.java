@@ -188,10 +188,10 @@ public class ProductoRepository {
 
     public void agregarProductosCarrito(int idCliente, int idProducto){
         Connection connection = DBConnection.getConnection();
-        PreparedStatement ps = null;
+        PreparedStatement ps;
 
-        String query = "INSERT INTO carrito (id_cliente,id_producto,cantidas) VALUES (?,?,?)"+
-                "ON DUPLICATE KEY UPDATE cantiad = cantidad +1";//incrementa la cantidad si ya esta en el carrito
+        String query = "INSERT INTO carrito (id_cliente,id_producto,cantidad) VALUES (?,?,1)"+
+                "ON DUPLICATE KEY UPDATE cantidad = cantidad + 1";//incrementa la cantidad si ya esta en el carrito
 
 
         try {
@@ -220,8 +220,9 @@ public class ProductoRepository {
             JOptionPane.showMessageDialog(null,"Debes iniciar sesion primero para ver los productos en el carrito");
             return productos;
         }
-        String query = "SELECT productos.id, productos.description, productos.price, productos.title, carrito.cantidad FROM carrito"+
-                "JOIN productos ON carrito.id_producto = productos.id"+
+        String query = "SELECT productos.id, productos.description, productos.price, productos.title, carrito.cantidad " +
+                "FROM carrito " +
+                "JOIN productos ON carrito.id_producto = productos.id " +
                 "WHERE carrito.id_cliente = ?";
 
         try {
@@ -241,7 +242,7 @@ public class ProductoRepository {
             resultSet.close();
             preparedStatement.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null,"Error al obtener los productos del carrito. ❌");
+            JOptionPane.showMessageDialog(null,"Error al obtener los productos del carrito. ❌ "+e.getMessage());
         }finally {
             DBConnection.closeConnecction();
         }

@@ -11,11 +11,10 @@ public class MenuPrincipalVentana extends JFrame {
         setTitle("Menu Principal");
         setSize(300,200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(6,1));
+        setLayout(new GridLayout(5,1));
 
         JButton actualizarClienteBoton = new JButton("Actualizar cliente");
         JButton verProductosBoton = new JButton("Ver productos");
-        JButton comprarProductosBoton = new JButton("Comprar productos");
         JButton verCarritoBoton = new JButton("Ver carrito");
         JButton finalizarCompraBoton = new JButton("Finalizar compra");
         JButton cerrarSesionBoton= new JButton("Cerrar sesión");
@@ -23,7 +22,6 @@ public class MenuPrincipalVentana extends JFrame {
         //añadir los botones a la ventana
         add(actualizarClienteBoton);
         add(verProductosBoton);
-        add(comprarProductosBoton);
         add(verCarritoBoton);
         add(finalizarCompraBoton);
         add(cerrarSesionBoton);
