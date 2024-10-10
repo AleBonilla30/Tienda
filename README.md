@@ -14,7 +14,7 @@
 
 - **Java** ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
 - **Swing** ![Swing](https://img.shields.io/badge/Swing-007ACC?style=for-the-badge&logo=java&logoColor=white) (usado para la interfaz gráfica)
-- **MySQL** ![MySQL](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white) (si aplica)
+- **MySQL** ![MySQL](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white) 
 
 ## Instalación
 
